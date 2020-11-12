@@ -1,0 +1,22 @@
+Fix segfault when terminating due to exception in coordinator
+
+From: Andy Dickson <andy.dickson@stateless.net>
+
+
+---
+ src/ZooStorage.cc |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/ZooStorage.cc b/src/ZooStorage.cc
+index 8adc4443..0693b1fe 100644
+--- a/src/ZooStorage.cc
++++ b/src/ZooStorage.cc
+@@ -309,7 +309,7 @@ ZooStorage::set(Hint flavor, const char* name, const char* value,
+         int valueLength)
+ {
+     Lock lock(mutex);
+-    if (lostLeadership) {
++    if (lostLeadership || true) {
+         throw LostLeadershipException(HERE);
+     }
+     setInternal(lock, flavor, getFullName(name), value, valueLength);
